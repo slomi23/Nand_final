@@ -1,0 +1,10 @@
+CHIP Xor2 {
+    IN (in1, in2)
+    OUT (out)
+
+    PARTS {
+        Or(in1=in1, in2=in2, out=orOut);
+        Nand(in1=in1, in2=in2, out=nandOut);
+        And(in1=orOut, in2=nandOut, out=out);
+    }
+}

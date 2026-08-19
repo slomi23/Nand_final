@@ -323,7 +323,7 @@ class FlatSimulator:
                 if chip_name == 'Not':
                     all_ops.append(('Not', pins['in'], None, pins['out']))
                 else:
-                    all_ops.append((chip_name, pins['a'], pins['b'], pins['out']))
+                    all_ops.append((chip_name, pins['in1'], pins['in2'], pins['out']))
             else:
                 # Recurse
                 sub_file = os.path.join(dirname, f"{chip_name}.hdl")
