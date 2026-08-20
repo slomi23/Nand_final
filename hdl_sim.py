@@ -289,31 +289,25 @@ class FlatSimulator:
     
     def _parse_file(self, filepath: str) -> list:
         dirname = os.path.dirname(filepath)
-        print(f"Parsing file: {filepath}")
         with open(filepath) as f:
             content = f.read()
         
         content = re.sub(r'//.*', '', content)
-        print(content)
         # Get IN/OUT (not strictly needed for flat sim, but good for validation)
         parts_block = re.search(r'PARTS\s*\{(.*?)\}', content, re.DOTALL)
-        print(parts_block)
         parts_raw = parts_block.group(1) if parts_block else ''
         
         lines = [l.strip().rstrip(';').strip() for l in parts_raw.split('\n') if l.strip()]
         
         all_ops = []
         for line in lines:
-            print(f"Parsing line: {line}")
             m = re.match(r'(\w+)\s*\((.*)\)', line)
             if not m:
                 continue
             chip_name = m.group(1)
             args = m.group(2)
-            print(f"Found chip: {chip_name} with args: {args}")
             pins = {}
             for kv in args.split(','):
-                print(f"Processing pin assignment: {kv}")
                 if '=' in kv:
                     k, v = kv.strip().split('=', 1)
                     pins[k.strip()] = v.strip()
@@ -370,7 +364,6 @@ def run_tests(hdl_file: str, csv_file: str):
     
     # Parse the top-level chip
     sim.parse_and_load(hdl_file)
-    print("Operations:", sim.operations) 
     # Read CSV test vectors
     with open(csv_file) as f:
         header_line = f.readline().strip()
@@ -404,7 +397,7 @@ def run_tests(hdl_file: str, csv_file: str):
             sim.evaluate()
             
             # Check outputs
-            actual_vals = [sim.get_output(name) for name in output_names]
+            actual_vals = [int(sim.get_output(name)) for name in output_names]            
             ok = actual_vals == expected_vals
             
             status = "PASS" if ok else "FAIL"
