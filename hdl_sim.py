@@ -92,7 +92,6 @@ class TopLevelChip:
         self.input_names = inputs
         self.output_names = outputs
         self.instances = instances
-        # Shared wire namespace: every part shares the same pool of named wires
         self.all_wires: Dict[str, Wire] = {}
 
     def _resolve_wire(self, name: str) -> Wire:
